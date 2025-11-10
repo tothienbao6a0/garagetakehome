@@ -24,7 +24,7 @@ describe("Home Page", () => {
     render(<Home />);
     
     expect(screen.getByText("Generate Invoices")).toBeInTheDocument();
-    expect(screen.getByText("GARAGE")).toBeInTheDocument();
+    expect(screen.getByAltText("Garage")).toBeInTheDocument();
   });
 
   it("should render the form with input and button", () => {

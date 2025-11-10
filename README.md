@@ -131,6 +131,8 @@ garagetakehome/
 │   └── listing.ts                     # TypeScript interfaces
 ├── test/
 │   └── setup.ts                       # Vitest configuration
+├── public/
+│   └── garage-logo.svg                # Garage brand logo
 └── vitest.config.ts                   # Test runner config
 ```
 

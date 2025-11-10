@@ -15,9 +15,9 @@ export default function Home() {
       {/* Header - Garage style */}
       <header className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold italic text-[#FF6B2C]">GARAGE</span>
-            <span className="text-sm text-gray-600">Invoice Generator</span>
+          <div className="flex items-center gap-3">
+            <img src="/garage-logo.svg" alt="Garage" className="h-8 w-auto" />
+            <span className="text-sm text-gray-600 border-l border-gray-300 pl-3">Invoice Generator</span>
           </div>
         </div>
       </header>
