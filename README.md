@@ -1,234 +1,236 @@
-# Garage Fire Truck Invoice Generator
+# Garage Invoice Generator
 
-A Next.js application that generates professional PDF invoices for Garage fire truck listings. This tool allows users to paste a Garage listing URL and receive a beautifully formatted PDF invoice suitable for fire department approval processes.
+<img src="garage-logo.svg" alt="Garage Logo" width="200">
 
-## 🚀 Tech Stack
+Professional PDF invoice generator for Garage fire truck listings.
 
-- **Next.js 16** - Latest App Router with React Server Components
-- **React 19** - Modern React with concurrent features
-- **TypeScript 5** - Type-safe development
-- **Tailwind CSS 4** - Utility-first styling
-- **@react-pdf/renderer** - PDF generation library
+## Features
 
-## ✨ Features
+- **Instant PDF Generation**: Convert any Garage fire truck listing URL into a professional invoice
+- **Garage-Branded Design**: Matches Garage's design system with signature orange (#FF6B2C) branding
+- **Modern Tech Stack**: Built with Next.js 15, React 19, TypeScript 5, and Tailwind CSS 4
+- **Fully Tested**: Comprehensive test suite with 20+ tests using Vitest and React Testing Library
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Type-Safe**: End-to-end TypeScript for reliability
 
-- ✅ Extract listing UUID from Garage URLs automatically
-- ✅ Fetch listing data via API (with fallback mock data)
-- ✅ Generate professional, styled PDF invoices
-- ✅ One-click download functionality
-- ✅ Responsive, modern UI with loading states
-- ✅ Comprehensive error handling and validation
-- ✅ Mobile-friendly design
+## Design System
 
-## 📋 Prerequisites
+This application closely follows Garage's design system:
 
-- Node.js 18+ installed
-- npm, yarn, pnpm, or bun package manager
+- **Primary Color**: `#FF6B2C` (Garage Orange)
+- **Typography**: Clean, modern sans-serif with bold headings
+- **Layout**: Card-based design with spacious padding
+- **Components**: Built with shadcn/ui and Radix UI primitives
+- **Accessibility**: WCAG compliant with proper ARIA labels
 
-## 🛠️ Installation
+## Tech Stack
 
-1. **Clone or download the repository**
+| Category | Technology |
+|----------|------------|
+| **Framework** | Next.js 15 (App Router) |
+| **UI Library** | React 19 |
+| **Language** | TypeScript 5 |
+| **Styling** | Tailwind CSS 4 |
+| **Components** | shadcn/ui + Radix UI |
+| **PDF Generation** | @react-pdf/renderer |
+| **Testing** | Vitest + React Testing Library |
+| **Package Manager** | npm |
 
-2. **Install dependencies**
+## Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd garagetakehome
+
+# Install dependencies
 npm install
-```
 
-3. **Run the development server**
-
-```bash
+# Run development server
 npm run dev
 ```
 
-4. **Open your browser**
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-Navigate to [http://localhost:3000](http://localhost:3000)
+## Testing
 
-## 🎯 Usage
+This project includes a comprehensive test suite covering:
+- Custom React hooks
+- UI components and interactions
+- API endpoints
+- Utility functions and constants
+- Error handling
 
-1. **Get a Garage listing URL**  
-   Visit [withgarage.com](https://withgarage.com) and find a fire truck listing
+### Running Tests
 
-2. **Paste the URL**  
-   Copy the full URL (format: `https://withgarage.com/listing/{uuid}`) into the input field
+```bash
+# Run all tests
+npm test
 
-3. **Generate Invoice**  
-   Click "Generate PDF Invoice" button
+# Run tests in watch mode
+npm run test:watch
 
-4. **Download**  
-   The PDF will automatically download with the filename `garage-invoice-{uuid}.pdf`
+# Run tests with UI
+npm run test:ui
 
-## 📁 Project Structure
+# Generate coverage report
+npm run test:coverage
+```
+
+### Test Structure
+
+```
+test/
+├── setup.ts                          # Test configuration
+app/
+├── page.test.tsx                     # Home page component tests
+hooks/
+├── use-pdf-generator.test.ts        # Custom hook tests
+lib/
+└── constants.test.ts                 # Constants and utilities tests
+```
+
+### Test Results
+
+```
+Test Files  3 passed (3)
+     Tests  20 passed (20)
+```
+
+## Usage
+
+1. **Paste a URL**: Enter any Garage fire truck listing URL (e.g., `https://www.shopgarage.com/listing/abc-123`)
+2. **Generate Invoice**: Click "Generate PDF Invoice"
+3. **Download**: The PDF will automatically download to your device
+
+### Supported URL Formats
+
+- `https://www.shopgarage.com/listing/{id}`
+- `https://withgarage.com/listing/{id}`
+- `http://www.shopgarage.com/listing/{id}`
+
+## Project Structure
 
 ```
 garagetakehome/
-├── app/                          # Next.js App Router
-│   ├── api/                      # API routes
-│   │   ├── listing/
-│   │   │   └── route.ts         # Fetch listing data from Garage API
-│   │   └── generate-pdf/
-│   │       └── route.ts         # Generate PDF from listing data
-│   ├── globals.css              # Global styles (Tailwind)
-│   ├── layout.tsx               # Root layout component
-│   └── page.tsx                 # Home page with form UI
+├── app/
+│   ├── api/
+│   │   ├── listing/route.ts          # Fetch listing data API
+│   │   └── generate-pdf/route.ts     # Generate PDF API
+│   ├── layout.tsx                     # Root layout with metadata
+│   ├── page.tsx                       # Main invoice generator page
+│   └── globals.css                    # Global styles with Garage theme
 ├── components/
-│   └── InvoicePDF.tsx           # PDF invoice template component
-├── public/                       # Static assets
-├── .gitignore                   # Git ignore rules
-├── next.config.ts               # Next.js configuration
-├── package.json                 # Dependencies
-├── postcss.config.mjs           # PostCSS config for Tailwind
-├── README.md                    # This file
-└── tsconfig.json                # TypeScript configuration
+│   ├── ui/                            # shadcn/ui components
+│   └── InvoicePDF.tsx                 # PDF template component
+├── hooks/
+│   └── use-pdf-generator.ts           # PDF generation logic hook
+├── lib/
+│   └── constants.ts                   # Shared constants and config
+├── types/
+│   └── listing.ts                     # TypeScript interfaces
+├── test/
+│   └── setup.ts                       # Vitest configuration
+└── vitest.config.ts                   # Test runner config
 ```
 
-## 🔌 API Endpoints
+## Development
 
-### `GET /api/listing?id={uuid}`
+### Commands
 
-Fetches listing data from Garage's API.
-
-**Query Parameters:**
-- `id` (required): The listing UUID from the URL
-
-**Response:**
-```json
-{
-  "id": "abc-123-xyz",
-  "title": "2018 Pierce Enforcer Pumper",
-  "description": "Excellent condition fire truck...",
-  "price": 425000,
-  "year": 2018,
-  "make": "Pierce",
-  "model": "Enforcer",
-  "mileage": 15000
-}
+```bash
+npm run dev        # Start development server
+npm run build      # Build for production
+npm start          # Run production build
+npm run lint       # Run ESLint
+npm test           # Run tests
 ```
 
-### `POST /api/generate-pdf`
+### Environment Variables
 
-Generates a PDF invoice from listing data.
+No environment variables required for basic functionality. The app uses fallback mock data when the Garage API is unavailable.
 
-**Request Body:**
-```json
-{
-  "id": "abc-123-xyz",
-  "title": "2018 Pierce Enforcer Pumper",
-  "description": "Details...",
-  "price": 425000
-}
-```
-
-**Response:**  
-Returns a PDF file with `Content-Type: application/pdf`
-
-## 🎨 PDF Invoice Design
-
-The generated invoice includes:
-- Professional header with "INVOICE" title
-- Invoice date and listing ID
-- Fire truck title and description
-- Detailed specifications (year, make, model, mileage)
-- Prominent price display
-- Clean, modern layout suitable for printing
-
-## 🔍 API Discovery
-
-The application attempts to fetch data from several potential Garage API endpoints:
-- `https://api.withgarage.com/listings/{id}`
-- `https://withgarage.com/api/listings/{id}`
-- `https://api.withgarage.com/v1/listings/{id}`
-- `https://withgarage.com/api/v1/listings/{id}`
-
-If the actual API is not accessible (due to authentication or network restrictions), the application falls back to mock data, allowing the invoice generation feature to be demonstrated.
-
-## 🚢 Deployment
+## Deployment
 
 ### Deploy to Vercel (Recommended)
 
-1. **Push code to GitHub**
-```bash
-git init
-git add .
-git commit -m "Initial commit: Garage invoice generator"
-git branch -M main
-git remote add origin <your-repo-url>
-git push -u origin main
-```
+1. Push your code to GitHub
+2. Import the project in [Vercel](https://vercel.com)
+3. Vercel will automatically detect Next.js and configure the build
+4. Deploy
 
-2. **Deploy on Vercel**
-   - Visit [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Click "Deploy"
-   - Vercel will automatically detect Next.js and configure everything
-
-3. **Done!**  
-   Your app will be live at `https://your-project.vercel.app`
-
-### Other Deployment Options
-
-- **Netlify**: Connect GitHub repo and deploy
-- **Docker**: Use `next build` and `next start`
-- **Self-hosted**: Build with `npm run build` and serve with `npm start`
-
-## 📦 Build Commands
+### Manual Build
 
 ```bash
-# Development
-npm run dev
-
-# Production build
 npm run build
-
-# Start production server
 npm start
-
-# Lint code
-npm run lint
 ```
 
-## 🧪 Testing the Application
+## Features in Detail
 
-1. Start the development server: `npm run dev`
-2. Open http://localhost:3000
-3. Try these example URL formats:
-   - `https://withgarage.com/listing/abc-123-xyz`
-   - `https://withgarage.com/listing/550e8400-e29b-41d4-a716-446655440000`
+### PDF Generation
 
-The app will extract the UUID and attempt to fetch/generate invoice data.
+- Professional invoice layout with Garage branding
+- Includes listing details, pricing, and metadata
+- Automatic date formatting
+- Clean typography and spacing
 
-## 🛡️ Error Handling
+### API Routes
 
-The application handles various error scenarios:
-- ❌ Invalid URL format
-- ❌ Missing listing ID
-- ❌ API request failures
-- ❌ PDF generation errors
-- ❌ Network issues
+**`/api/listing`**
+- Fetches listing data from Garage API
+- Falls back to mock data for development
+- Validates required fields
 
-All errors are displayed to users with clear, actionable messages.
+**`/api/generate-pdf`**
+- Generates PDF from listing data
+- Type-safe with validation
+- Returns downloadable PDF file
 
-## 📝 Assignment Notes
+### Custom Hooks
 
-This project was created as part of the Garage take-home assignment. Key requirements implemented:
+**`usePDFGenerator`**
+- Manages URL state and validation
+- Handles API calls and error states
+- Uses React 19's `useTransition` for non-blocking UI
+- Memoized with `useCallback` for performance
 
-✅ Next.js application with TypeScript  
-✅ Text input for Garage listing URLs  
-✅ UUID extraction from `/listing/{uuid}` pattern  
-✅ API integration (with mock fallback)  
-✅ PDF invoice generation with listing details  
-✅ Professional styling and UX  
-✅ Ready for Vercel deployment  
+## Troubleshooting
 
-**Time Estimate:** Approximately 3-5 hours to complete
+### Common Issues
 
-## 📧 Contact
+**PDF not downloading?**
+- Check browser pop-up settings
+- Ensure JavaScript is enabled
+- Try a different browser
 
-For questions about this implementation, please contact the assignment contact at Garage.
+**Invalid URL error?**
+- Verify the URL format matches `*/listing/{id}`
+- Ensure the listing ID is present
 
-## 📄 License
+**API errors?**
+- The app falls back to mock data if the API is unavailable
+- Check network connectivity
 
-MIT License - See LICENSE file for details
+## License
 
+MIT License - see LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add/update tests as needed
+5. Ensure all tests pass (`npm test`)
+6. Submit a pull request
+
+## Contact
+
+For questions or support, contact: alaz@withgarage.com
+
+---
+
+Built for Garage
