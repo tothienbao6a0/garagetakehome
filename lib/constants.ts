@@ -1,4 +1,4 @@
-export const UUID_REGEX = /\/listing\/([a-f0-9-]+)/i;
+export const UUID_REGEX = /\/listing\/([\w-]+)/i;
 
 export const ERROR_MESSAGES = {
   INVALID_URL: "Invalid listing URL format. Expected: .../listing/{uuid}",
