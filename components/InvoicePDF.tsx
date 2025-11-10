@@ -1,11 +1,9 @@
-import React from "react";
 import {
   Document,
   Page,
   Text,
   View,
   StyleSheet,
-  Font,
 } from "@react-pdf/renderer";
 
 // Define styles for the PDF

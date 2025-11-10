@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
     ];
 
     let listingData = null;
-    let lastError = null;
 
     // Try each endpoint until one works
     for (const endpoint of possibleEndpoints) {
@@ -31,14 +30,14 @@ export async function GET(request: NextRequest) {
             "Accept": "application/json",
             "User-Agent": "Garage-Invoice-Generator",
           },
+          cache: "no-store",
         });
 
         if (response.ok) {
           listingData = await response.json();
           break;
         }
-      } catch (err) {
-        lastError = err;
+      } catch {
         continue;
       }
     }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { InvoicePDF } from "@/components/InvoicePDF";
-import React from "react";
+import { createElement } from "react";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate PDF
-    const pdfElement = React.createElement(InvoicePDF, { listing: listingData });
+    const pdfElement = createElement(InvoicePDF, { listing: listingData });
     const pdfBuffer = await renderToBuffer(pdfElement as any);
 
     // Return PDF as response
