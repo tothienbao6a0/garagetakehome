@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
+import type { ListingData } from "@/types/listing";
 
 // Define styles for the PDF
 const styles = StyleSheet.create({
@@ -106,22 +107,11 @@ const styles = StyleSheet.create({
   },
 });
 
-interface ListingData {
-  id: string;
-  title: string;
-  description?: string;
-  price: number;
-  year?: number;
-  make?: string;
-  model?: string;
-  mileage?: number;
-}
-
 interface InvoicePDFProps {
   listing: ListingData;
 }
 
-export const InvoicePDF: React.FC<InvoicePDFProps> = ({ listing }) => {
+export function InvoicePDF({ listing }: InvoicePDFProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",

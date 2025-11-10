@@ -1,68 +1,14 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { usePDFGenerator } from "@/hooks/use-pdf-generator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Download, AlertCircle } from "lucide-react";
 
 export default function Home() {
-  const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      // Extract UUID from URL
-      const match = url.match(/\/listing\/([a-f0-9-]+)/i);
-      if (!match) {
-        throw new Error("Invalid listing URL format. Expected: .../listing/{uuid}");
-      }
-
-      const listingId = match[1];
-
-      // Fetch listing data
-      const response = await fetch(`/api/listing?id=${listingId}`);
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Failed to fetch listing data");
-      }
-
-      const listingData = await response.json();
-
-      // Generate PDF
-      const pdfResponse = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(listingData),
-      });
-
-      if (!pdfResponse.ok) {
-        throw new Error("Failed to generate PDF");
-      }
-
-      // Download PDF
-      const blob = await pdfResponse.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = `garage-invoice-${listingId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(downloadUrl);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  }, [url]);
+  const { url, setUrl, error, isPending, generatePDF } = usePDFGenerator();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
@@ -78,7 +24,7 @@ export default function Home() {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={generatePDF} className="space-y-6">
               <div className="space-y-2">
                 <label 
                   htmlFor="url" 
@@ -93,27 +39,30 @@ export default function Home() {
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://withgarage.com/listing/..."
                   required
+                  disabled={isPending}
                   className="h-11"
+                  aria-describedby="url-description"
+                  aria-invalid={!!error}
                 />
-                <p className="text-sm text-muted-foreground">
+                <p id="url-description" className="text-sm text-muted-foreground">
                   Paste a Garage fire truck listing URL
                 </p>
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+                <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
-                  <span>{error}</span>
-                </div>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
 
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={isPending || !url.trim()}
                 className="w-full h-11"
                 size="lg"
               >
-                {loading ? (
+                {isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Generating Invoice...
