@@ -23,27 +23,28 @@ describe("Home Page", () => {
   it("should render the main heading", () => {
     render(<Home />);
     
-    expect(screen.getByText("Garage Invoice Generator")).toBeInTheDocument();
+    expect(screen.getByText("Generate Invoices")).toBeInTheDocument();
+    expect(screen.getByText("GARAGE")).toBeInTheDocument();
   });
 
   it("should render the form with input and button", () => {
     render(<Home />);
     
     expect(screen.getByLabelText("Listing URL")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("https://withgarage.com/listing/...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("https://www.shopgarage.com/listing/...")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Generate PDF Invoice/i })).toBeInTheDocument();
   });
 
   it("should render description text", () => {
     render(<Home />);
     
-    expect(screen.getByText("Generate professional PDF invoices for fire truck listings")).toBeInTheDocument();
+    expect(screen.getByText("Create professional PDF invoices for fire truck listings")).toBeInTheDocument();
   });
 
   it("should render how it works section", () => {
     render(<Home />);
     
-    expect(screen.getByText("How it works:")).toBeInTheDocument();
+    expect(screen.getByText("How it works")).toBeInTheDocument();
     // Use getAllByText since the text appears in both placeholder and list
     const elements = screen.getAllByText(/Paste a Garage fire truck listing URL/i);
     expect(elements.length).toBeGreaterThan(0);
