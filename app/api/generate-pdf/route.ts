@@ -16,12 +16,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate PDF
-    const pdfBuffer = await renderToBuffer(
-      React.createElement(InvoicePDF, { listing: listingData })
-    );
+    const pdfElement = React.createElement(InvoicePDF, { listing: listingData });
+    const pdfBuffer = await renderToBuffer(pdfElement as any);
 
     // Return PDF as response
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(Buffer.from(pdfBuffer), {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
