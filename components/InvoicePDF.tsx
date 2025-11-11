@@ -4,6 +4,8 @@ import {
   Text,
   View,
   StyleSheet,
+  Svg,
+  Path,
 } from "@react-pdf/renderer";
 import type { ListingData } from "@/types/listing";
 
@@ -19,13 +21,23 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     paddingBottom: 24,
     borderBottom: "2 solid #E5E7EB",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  logoContainer: {
+    width: 40,
+    height: 40,
+  },
+  headerText: {
+    flex: 1,
   },
   garageTitle: {
     fontSize: 32,
     fontWeight: "bold",
     fontStyle: "italic",
     color: "#FF6B2C",
-    marginBottom: 12,
+    marginBottom: 8,
     letterSpacing: 0.5,
   },
   title: {
@@ -154,8 +166,18 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
       <Page size="A4" style={styles.page}>
         {/* Header - Garage Branded */}
         <View style={styles.header}>
-          <Text style={styles.garageTitle}>GARAGE</Text>
-          <Text style={styles.subtitle}>Invoice • {currentDate}</Text>
+          <View style={styles.logoContainer}>
+            <Svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
+              <Path
+                d="M39.84 36.72c-1.08-1.08-2.04-1.8-2.88-2.16-.84-.36-1.8-.54-2.88-.54-2.52 0-4.92.96-7.2 2.88v-1.92h-9v28.08h9.36v-12.24c0-2.16.66-3.84 1.98-5.04 1.32-1.2 2.82-1.8 4.5-1.8 1.44 0 2.58.42 3.42 1.26.84.84 1.26 2.04 1.26 3.6v14.22h9.36v-14.76c0-3.96-.96-7.08-2.88-9.36l-.04-.22zM65.04 34.98c-.84-.36-1.8-.54-2.88-.54-2.52 0-4.92.96-7.2 2.88v-1.92h-9v28.08h9.36v-12.24c0-2.16.66-3.84 1.98-5.04 1.32-1.2 2.82-1.8 4.5-1.8 1.44 0 2.58.42 3.42 1.26.84.84 1.26 2.04 1.26 3.6v14.22h9.36v-14.76c0-3.96-.96-7.08-2.88-9.36-1.08-1.08-2.04-1.8-2.88-2.16l-.04-.22z"
+                fill="#FF6B2C"
+              />
+            </Svg>
+          </View>
+          <View style={styles.headerText}>
+            <Text style={styles.garageTitle}>GARAGE</Text>
+            <Text style={styles.subtitle}>Invoice • {currentDate}</Text>
+          </View>
         </View>
 
         {/* Invoice Details */}
