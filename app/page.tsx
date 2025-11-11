@@ -16,7 +16,7 @@ export default function Home() {
       <header className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/garage-logo.svg" alt="Garage" className="h-8 w-auto" />
+            <img src="/garage-logo.svg" alt="Garage" className="h-6 w-auto" />
             <span className="text-sm text-gray-600 border-l border-gray-300 pl-3">Invoice Generator</span>
           </div>
         </div>
