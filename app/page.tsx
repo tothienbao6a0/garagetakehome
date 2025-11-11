@@ -16,7 +16,7 @@ export default function Home() {
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-4xl sm:text-5xl font-bold text-black mb-4">
+            <h1 className="text-4xl sm:text-5xl font-medium text-black mb-4">
               Generate Invoices
             </h1>
             <p className="text-lg text-gray-600">
