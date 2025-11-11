@@ -16,16 +16,19 @@ export default function Home() {
       <header className="border-b border-gray-200 bg-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-8">
+            {/* Logo on left */}
+            <div className="flex items-center">
               <img src="/garage-logo.svg" alt="Garage" className="h-5 w-auto" />
+            </div>
+            
+            {/* Nav links + Search on right */}
+            <div className="flex items-center gap-6">
               <nav className="hidden md:flex items-center gap-6">
                 <a href="#" className="text-base font-normal text-black hover:text-gray-600">Auctions</a>
                 <a href="#" className="text-base font-normal text-black hover:text-gray-600">Appraisal</a>
                 <a href="#" className="text-base font-normal text-black hover:text-gray-600">Sell</a>
                 <a href="#" className="text-base font-normal text-black hover:text-gray-600">Log in</a>
               </nav>
-            </div>
-            <div className="flex items-center gap-4">
               <div className="relative">
                 <input 
                   type="text" 
