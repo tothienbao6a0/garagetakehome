@@ -14,10 +14,10 @@ interface InvoiceFormProps {
 export function InvoiceForm({ url, setUrl, error, isPending, onSubmit }: InvoiceFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-6">
-      <div className="space-y-2">
+      <div className="space-y-3">
         <label 
           htmlFor="url" 
-          className="text-sm font-medium text-black"
+          className="block text-sm font-medium text-black"
         >
           Listing URL
         </label>
@@ -29,11 +29,11 @@ export function InvoiceForm({ url, setUrl, error, isPending, onSubmit }: Invoice
           placeholder="https://www.shopgarage.com/listing/..."
           required
           disabled={isPending}
-          className="h-12 border-gray-300 focus:border-[#FF6B2C] focus:ring-[#FF6B2C]"
+          className="h-11 border-gray-300 focus:border-[#FF6B2C] focus:ring-[#FF6B2C]"
           aria-describedby="url-description"
           aria-invalid={!!error}
         />
-        <p id="url-description" className="text-sm text-gray-500">
+        <p id="url-description" className="text-sm text-gray-500 mt-2">
           Paste a Garage fire truck listing URL
         </p>
       </div>
