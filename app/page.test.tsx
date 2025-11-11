@@ -1,3 +1,4 @@
+/// <reference types="../vitest.d.ts" />
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import Home from "./page";
