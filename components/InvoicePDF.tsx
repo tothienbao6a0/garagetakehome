@@ -18,19 +18,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   header: {
-    marginBottom: 40,
-    paddingBottom: 24,
-    borderBottom: "2 solid #E5E7EB",
+    marginBottom: 32,
     flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
   logoContainer: {
     width: 80,
     height: 21,
   },
-  headerText: {
-    flex: 1,
+  headerRight: {
+    alignItems: "flex-end",
+  },
+  invoiceTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#000000",
+    marginBottom: 8,
   },
   garageTitle: {
     fontSize: 24,
@@ -40,66 +44,118 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     letterSpacing: 0.5,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 600,
-    color: "#000000",
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: "#6B7280",
-  },
-  section: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: 9,
-    color: "#6B7280",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: 6,
-    fontWeight: 600,
-  },
-  value: {
-    fontSize: 13,
-    color: "#000000",
-    marginBottom: 16,
-    lineHeight: 1.4,
-  },
-  truckTitle: {
-    fontSize: 18,
-    fontWeight: 600,
-    color: "#000000",
-    marginBottom: 12,
-    lineHeight: 1.3,
-  },
-  description: {
+  invoiceInfo: {
     fontSize: 11,
     color: "#374151",
-    lineHeight: 1.7,
-    marginBottom: 20,
+    marginBottom: 4,
   },
-  priceSection: {
-    marginTop: 32,
-    padding: 24,
-    backgroundColor: "#FFFBF5",
-    borderRadius: 6,
-    border: "1 solid #FFD4B8",
+  fromSection: {
+    marginBottom: 24,
   },
-  priceLabel: {
-    fontSize: 11,
+  billToSection: {
+    marginBottom: 32,
+    paddingBottom: 24,
+    borderBottom: "1 solid #E5E7EB",
+  },
+  sectionTitle: {
+    fontSize: 10,
+    fontWeight: 600,
     color: "#6B7280",
-    marginBottom: 8,
     textTransform: "uppercase",
     letterSpacing: 1,
-    fontWeight: 600,
+    marginBottom: 8,
   },
-  price: {
-    fontSize: 36,
+  companyName: {
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#000000",
+    marginBottom: 4,
+  },
+  address: {
+    fontSize: 10,
+    color: "#6B7280",
+    lineHeight: 1.5,
+  },
+  lineItemsSection: {
+    marginBottom: 32,
+  },
+  lineItemHeader: {
+    flexDirection: "row",
+    borderBottom: "2 solid #E5E7EB",
+    paddingBottom: 10,
+    marginBottom: 16,
+  },
+  lineItemHeaderText: {
+    fontSize: 10,
+    fontWeight: 600,
+    color: "#6B7280",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  descriptionColumn: {
+    width: "70%",
+  },
+  amountColumn: {
+    width: "30%",
+    textAlign: "right",
+  },
+  lineItem: {
+    marginBottom: 16,
+  },
+  itemTitle: {
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#000000",
+    marginBottom: 6,
+  },
+  itemDescription: {
+    fontSize: 10,
+    color: "#6B7280",
+    lineHeight: 1.6,
+    marginBottom: 8,
+  },
+  itemSpecs: {
+    fontSize: 9,
+    color: "#6B7280",
+    lineHeight: 1.5,
+  },
+  totalSection: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingTop: 16,
+    borderTop: "2 solid #E5E7EB",
+    marginBottom: 32,
+  },
+  totalLabel: {
+    fontSize: 14,
+    fontWeight: 600,
+    color: "#000000",
+    marginRight: 40,
+  },
+  totalAmount: {
+    fontSize: 20,
     fontWeight: "bold",
     color: "#FF6B2C",
-    letterSpacing: -1,
+    textAlign: "right",
+  },
+  termsSection: {
+    marginTop: 32,
+    padding: 20,
+    backgroundColor: "#F9FAFB",
+    borderRadius: 4,
+  },
+  termsTitle: {
+    fontSize: 10,
+    fontWeight: 600,
+    color: "#000000",
+    marginBottom: 8,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  termsText: {
+    fontSize: 9,
+    color: "#6B7280",
+    lineHeight: 1.6,
   },
   footer: {
     position: "absolute",
@@ -107,37 +163,10 @@ const styles = StyleSheet.create({
     left: 48,
     right: 48,
     borderTop: "1 solid #E5E7EB",
-    paddingTop: 20,
-    fontSize: 9,
+    paddingTop: 16,
+    fontSize: 8,
     color: "#9CA3AF",
     textAlign: "center",
-  },
-  metadata: {
-    marginTop: 24,
-    padding: 18,
-    backgroundColor: "#F9FAFB",
-    borderRadius: 4,
-    border: "1 solid #E5E7EB",
-  },
-  metadataRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  metadataLabel: {
-    fontSize: 10,
-    color: "#6B7280",
-    fontWeight: 500,
-  },
-  metadataValue: {
-    fontSize: 10,
-    color: "#000000",
-    fontWeight: 600,
-  },
-  invoiceNumber: {
-    fontSize: 11,
-    color: "#6B7280",
-    marginTop: 4,
   },
 });
 
@@ -161,10 +190,13 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
     day: "numeric",
   });
 
+  // Generate invoice number from listing ID
+  const invoiceNumber = `INV-${listing.id.substring(0, 8).toUpperCase()}`;
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header - Garage Branded */}
+        {/* Header */}
         <View style={styles.header}>
           <View style={styles.logoContainer}>
             <Svg viewBox="0 0 707 187" style={{ width: "100%", height: "100%" }}>
@@ -194,72 +226,93 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
               />
             </Svg>
           </View>
-          <View style={styles.headerText}>
-            <Text style={styles.subtitle}>Invoice • {currentDate}</Text>
+          <View style={styles.headerRight}>
+            <Text style={styles.invoiceTitle}>INVOICE</Text>
+            <Text style={styles.invoiceInfo}>Invoice #: {invoiceNumber}</Text>
+            <Text style={styles.invoiceInfo}>Date: {currentDate}</Text>
           </View>
         </View>
 
-        {/* Invoice Details */}
-        <View style={styles.section}>
-          <Text style={styles.title}>Invoice Details</Text>
-          <Text style={styles.invoiceNumber}>Listing #{listing.id}</Text>
+        {/* From Section */}
+        <View style={styles.fromSection}>
+          <Text style={styles.sectionTitle}>From</Text>
+          <Text style={styles.companyName}>Garage</Text>
+          <Text style={styles.address}>Fire Truck Equipment Marketplace</Text>
+          <Text style={styles.address}>alaz@withgarage.com</Text>
         </View>
 
-        {/* Truck Information */}
-        <View style={styles.section}>
-          <Text style={styles.label}>Fire Truck Equipment</Text>
-          <Text style={styles.truckTitle}>{listing.title}</Text>
-
-          {listing.description && (
-            <Text style={styles.description}>{listing.description}</Text>
-          )}
+        {/* Bill To Section */}
+        <View style={styles.billToSection}>
+          <Text style={styles.sectionTitle}>Bill To</Text>
+          <Text style={styles.address}>Fire Department</Text>
+          <Text style={styles.address}>(Customer information)</Text>
         </View>
 
-        {/* Additional Metadata */}
-        {(listing.year || listing.make || listing.model || listing.mileage) && (
-          <View style={styles.metadata}>
-            {listing.year && (
-              <View style={styles.metadataRow}>
-                <Text style={styles.metadataLabel}>Year:</Text>
-                <Text style={styles.metadataValue}>{listing.year}</Text>
-              </View>
-            )}
-            {listing.make && (
-              <View style={styles.metadataRow}>
-                <Text style={styles.metadataLabel}>Make:</Text>
-                <Text style={styles.metadataValue}>{listing.make}</Text>
-              </View>
-            )}
-            {listing.model && (
-              <View style={styles.metadataRow}>
-                <Text style={styles.metadataLabel}>Model:</Text>
-                <Text style={styles.metadataValue}>{listing.model}</Text>
-              </View>
-            )}
-            {listing.mileage && (
-              <View style={styles.metadataRow}>
-                <Text style={styles.metadataLabel}>Mileage:</Text>
-                <Text style={styles.metadataValue}>
-                  {listing.mileage.toLocaleString()} miles
-                </Text>
-              </View>
-            )}
+        {/* Line Items */}
+        <View style={styles.lineItemsSection}>
+          <View style={styles.lineItemHeader}>
+            <Text style={[styles.lineItemHeaderText, styles.descriptionColumn]}>
+              Description
+            </Text>
+            <Text style={[styles.lineItemHeaderText, styles.amountColumn]}>
+              Amount
+            </Text>
           </View>
-        )}
 
-        {/* Price */}
-        <View style={styles.priceSection}>
-          <Text style={styles.priceLabel}>Total Price</Text>
-          <Text style={styles.price}>{formatPrice(listing.price)}</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View style={styles.descriptionColumn}>
+              <View style={styles.lineItem}>
+                <Text style={styles.itemTitle}>{listing.title}</Text>
+                {listing.description && (
+                  <Text style={styles.itemDescription}>
+                    {listing.description}
+                  </Text>
+                )}
+                {(listing.year || listing.make || listing.model || listing.mileage) && (
+                  <Text style={styles.itemSpecs}>
+                    {[
+                      listing.year,
+                      listing.make,
+                      listing.model,
+                      listing.mileage && `${listing.mileage.toLocaleString()} miles`,
+                    ]
+                      .filter(Boolean)
+                      .join(" • ")}
+                  </Text>
+                )}
+              </View>
+            </View>
+            <View style={styles.amountColumn}>
+              <Text style={[styles.itemTitle, { textAlign: "right" }]}>
+                {formatPrice(listing.price)}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Total */}
+        <View style={styles.totalSection}>
+          <Text style={styles.totalLabel}>TOTAL</Text>
+          <Text style={styles.totalAmount}>{formatPrice(listing.price)}</Text>
+        </View>
+
+        {/* Terms */}
+        <View style={styles.termsSection}>
+          <Text style={styles.termsTitle}>Payment Terms & Notes</Text>
+          <Text style={styles.termsText}>
+            This invoice is a quote for fire truck equipment listed on Garage. Please contact 
+            alaz@withgarage.com for purchase inquiries, payment terms, and delivery arrangements.
+            Price is subject to availability and may be adjusted based on final inspection and negotiation.
+          </Text>
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={{ marginBottom: 4 }}>GARAGE Invoice Generator</Text>
-          <Text>Questions? Contact alaz@withgarage.com</Text>
+          <Text>Thank you for your business • Questions? Contact alaz@withgarage.com</Text>
         </View>
       </Page>
     </Document>
   );
 };
+
 
