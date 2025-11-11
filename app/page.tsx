@@ -15,7 +15,7 @@ export default function Home() {
       {/* Header - Garage style */}
       <header className="border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-[72px]">
             {/* Logo on left */}
             <div className="flex items-center">
               <img src="/garage-logo.svg" alt="Garage" className="h-5 w-auto" />
