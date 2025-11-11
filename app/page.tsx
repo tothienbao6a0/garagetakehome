@@ -14,28 +14,27 @@ export default function Home() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header - Garage style */}
       <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-12">
+            <div className="flex items-center gap-8">
               <img src="/garage-logo.svg" alt="Garage" className="h-5 w-auto" />
-              <nav className="hidden md:flex items-center gap-8">
-                <a href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600">Auctions</a>
-                <a href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600">Appraisal</a>
-                <a href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600">Sell</a>
-                <a href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600">Log in</a>
+              <nav className="hidden md:flex items-center gap-6">
+                <a href="#" className="text-base font-normal text-black hover:text-gray-600">Auctions</a>
+                <a href="#" className="text-base font-normal text-black hover:text-gray-600">Appraisal</a>
+                <a href="#" className="text-base font-normal text-black hover:text-gray-600">Sell</a>
+                <a href="#" className="text-base font-normal text-black hover:text-gray-600">Log in</a>
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <span className="hidden lg:inline text-sm text-gray-600 mr-4">Invoice Generator</span>
               <div className="relative">
                 <input 
                   type="text" 
                   placeholder="Browse listings"
-                  className="w-64 pl-4 pr-10 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#FF6B2C] focus:border-transparent"
+                  className="w-72 pl-4 pr-12 py-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-full placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B2C] focus:border-transparent focus:bg-white"
                   readOnly
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </button>
