@@ -31,7 +31,7 @@ describe("Home Page", () => {
     render(<Home />);
     
     expect(screen.getByLabelText("Listing URL")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("https://www.shopgarage.com/listing/...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("https://www.withgarage.com/listing/...")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Generate PDF Invoice/i })).toBeInTheDocument();
   });
 
