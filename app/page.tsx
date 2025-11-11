@@ -13,7 +13,7 @@ export default function Home() {
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-6">
         <div className="w-full max-w-2xl">
           <div className="text-center mb-8">
             <h1 className="text-4xl sm:text-5xl font-semibold text-black mb-4">
