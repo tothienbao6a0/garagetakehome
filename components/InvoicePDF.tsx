@@ -235,17 +235,18 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
 
         {/* From Section */}
         <View style={styles.fromSection}>
-          <Text style={styles.sectionTitle}>From</Text>
-          <Text style={styles.companyName}>Garage</Text>
-          <Text style={styles.address}>Fire Truck Equipment Marketplace</Text>
-          <Text style={styles.address}>alaz@withgarage.com</Text>
+          <Text style={styles.sectionTitle}>From (Seller)</Text>
+          <Text style={styles.companyName}>Equipment Seller</Text>
+          <Text style={styles.address}>Listed on Garage Marketplace</Text>
+          <Text style={styles.address}>For seller contact: alaz@withgarage.com</Text>
         </View>
 
         {/* Bill To Section */}
         <View style={styles.billToSection}>
-          <Text style={styles.sectionTitle}>Bill To</Text>
-          <Text style={styles.address}>Fire Department</Text>
-          <Text style={styles.address}>(Customer information)</Text>
+          <Text style={styles.sectionTitle}>Bill To (Buyer)</Text>
+          <Text style={styles.address}>____________________________________</Text>
+          <Text style={styles.address}>____________________________________</Text>
+          <Text style={styles.address}>____________________________________</Text>
         </View>
 
         {/* Line Items */}
@@ -300,15 +301,16 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
         <View style={styles.termsSection}>
           <Text style={styles.termsTitle}>Payment Terms & Notes</Text>
           <Text style={styles.termsText}>
-            This invoice is a quote for fire truck equipment listed on Garage. Please contact 
-            alaz@withgarage.com for purchase inquiries, payment terms, and delivery arrangements.
-            Price is subject to availability and may be adjusted based on final inspection and negotiation.
+            This is a quote for fire truck equipment listed on Garage Marketplace. Garage connects 
+            buyers and sellers but is not a party to the transaction. Please contact alaz@withgarage.com 
+            to connect with the seller for purchase inquiries, payment terms, and delivery arrangements. 
+            Price is subject to availability and final negotiation between buyer and seller.
           </Text>
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text>Thank you for your business • Questions? Contact alaz@withgarage.com</Text>
+          <Text>Generated via Garage Marketplace • To connect with seller: alaz@withgarage.com</Text>
         </View>
       </Page>
     </Document>
