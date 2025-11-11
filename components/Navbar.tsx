@@ -48,22 +48,34 @@ export function Navbar() {
 }
 
 function SearchInput() {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Note: Search functionality would redirect to Garage website
+    // This is a UI mockup matching Garage's design
+    const formData = new FormData(e.currentTarget);
+    const query = formData.get("search");
+    if (query) {
+      window.open(`https://www.withgarage.com/search?q=${encodeURIComponent(query.toString())}`, "_blank");
+    }
+  };
+
   return (
-    <div className="relative">
+    <form onSubmit={handleSearch} className="relative">
       <input 
-        type="text" 
+        type="text"
+        name="search"
         placeholder="Browse listings"
         className="w-64 pl-4 pr-12 py-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-full placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B2C] focus:border-transparent focus:bg-white transition-colors"
         aria-label="Search listings"
       />
       <button 
-        type="button"
+        type="submit"
         className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
         aria-label="Search"
       >
         <Search className="w-5 h-5 text-gray-600" />
       </button>
-    </div>
+    </form>
   );
 }
 
