@@ -14,8 +14,8 @@ export default function Home() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header - Garage style */}
       <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
             {/* Logo on left */}
             <div className="flex items-center">
               <img src="/garage-logo.svg" alt="Garage" className="h-5 w-auto" />
@@ -33,7 +33,7 @@ export default function Home() {
                 <input 
                   type="text" 
                   placeholder="Browse listings"
-                  className="w-72 pl-4 pr-12 py-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-full placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B2C] focus:border-transparent focus:bg-white"
+                  className="w-64 pl-4 pr-12 py-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-full placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B2C] focus:border-transparent focus:bg-white"
                   readOnly
                 />
                 <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5">
