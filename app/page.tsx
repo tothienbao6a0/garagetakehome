@@ -25,7 +25,7 @@ export default function Home() {
           </div>
 
           <Card className="border-gray-200 shadow-sm">
-            <CardContent className="pt-6 space-y-6">
+            <CardContent className="space-y-6">
               <InvoiceForm
                 url={url}
                 setUrl={setUrl}
