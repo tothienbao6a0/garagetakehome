@@ -13,11 +13,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header - Garage style */}
-      <header className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/garage-logo.svg" alt="Garage" className="h-6 w-auto" />
-            <span className="text-sm text-gray-600 border-l border-gray-300 pl-3">Invoice Generator</span>
+      <header className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <img src="/garage-logo.svg" alt="Garage" className="h-5 w-auto" />
+            </div>
+            <div className="flex items-center gap-8">
+              <span className="text-sm text-gray-600">Invoice Generator</span>
+            </div>
           </div>
         </div>
       </header>
