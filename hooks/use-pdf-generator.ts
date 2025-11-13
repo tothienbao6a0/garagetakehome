@@ -77,7 +77,7 @@ export function usePDFGenerator(): UsePDFGeneratorReturn {
         setError(err instanceof Error ? err.message : ERROR_MESSAGES.UNEXPECTED_ERROR);
       }
     });
-  }, [url, extractListingId, fetchListingData, generatePDFFromData, downloadPDF]);
+  }, [url]);
 
   return {
     url,

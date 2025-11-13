@@ -16,3 +16,8 @@ export const API_CONFIG = {
   USER_AGENT: "Garage-Invoice-Generator",
 } as const;
 
+export const CONTACT_INFO = {
+  EMAIL: "alaz@withgarage.com",
+  COMPANY_NAME: "Garage Marketplace",
+} as const;
+

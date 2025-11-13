@@ -4,6 +4,7 @@ import { InvoicePDF } from "@/components/InvoicePDF";
 import { createElement } from "react";
 import type { ListingData, ApiError } from "@/types/listing";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limiter";
 
 function validateListingData(data: unknown): data is ListingData {
   if (!data || typeof data !== "object") return false;
@@ -17,6 +18,30 @@ function validateListingData(data: unknown): data is ListingData {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Rate limiting check
+  const clientId = getClientIdentifier(request.headers);
+  const rateLimit = checkRateLimit(clientId);
+
+  // Add rate limit headers to all responses
+  const rateLimitHeaders = {
+    "X-RateLimit-Limit": rateLimit.limit.toString(),
+    "X-RateLimit-Remaining": rateLimit.remaining.toString(),
+    "X-RateLimit-Reset": new Date(rateLimit.resetTime).toISOString(),
+  };
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json<ApiError>(
+      { error: "Rate limit exceeded. Please try again later." },
+      {
+        status: 429,
+        headers: {
+          ...rateLimitHeaders,
+          "Retry-After": Math.ceil((rateLimit.resetTime - Date.now()) / 1000).toString(),
+        }
+      }
+    );
+  }
+
   try {
     const listingData: unknown = await request.json();
 
@@ -24,7 +49,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!validateListingData(listingData)) {
       return NextResponse.json<ApiError>(
         { error: ERROR_MESSAGES.MISSING_FIELDS },
-        { status: 400 }
+        { status: 400, headers: rateLimitHeaders }
       );
     }
 
@@ -39,13 +64,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="garage-invoice-${listingData.id}.pdf"`,
         "Cache-Control": "no-store, max-age=0",
+        ...rateLimitHeaders,
       },
     });
   } catch (error) {
     console.error("Error generating PDF:", error);
     return NextResponse.json<ApiError>(
       { error: ERROR_MESSAGES.PDF_GENERATION_FAILED },
-      { status: 500 }
+      { status: 500, headers: rateLimitHeaders }
     );
   }
 }

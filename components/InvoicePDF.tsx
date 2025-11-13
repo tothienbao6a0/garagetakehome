@@ -1,6 +1,7 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 import type { ListingData } from "@/types/listing";
 import { invoiceStyles } from "@/lib/invoice-styles";
+import { CONTACT_INFO } from "@/lib/constants";
 import { GarageLogo } from "./GarageLogo";
 import {
   formatPrice,
@@ -42,8 +43,8 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
         <View style={invoiceStyles.fromSection}>
           <Text style={invoiceStyles.sectionTitle}>From (Seller)</Text>
           <Text style={invoiceStyles.companyName}>Equipment Seller</Text>
-          <Text style={invoiceStyles.address}>Listed on Garage Marketplace</Text>
-          <Text style={invoiceStyles.address}>For seller contact: alaz@withgarage.com</Text>
+          <Text style={invoiceStyles.address}>Listed on {CONTACT_INFO.COMPANY_NAME}</Text>
+          <Text style={invoiceStyles.address}>For seller contact: {CONTACT_INFO.EMAIL}</Text>
         </View>
 
         {/* Bill To Section */}
@@ -109,9 +110,9 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
         <View style={invoiceStyles.termsSection}>
           <Text style={invoiceStyles.termsTitle}>Payment Terms & Notes</Text>
           <Text style={invoiceStyles.termsText}>
-            This is a quote for fire truck equipment listed on Garage
-            Marketplace. Garage connects buyers and sellers but is not a party
-            to the transaction. Please contact alaz@withgarage.com to connect
+            This is a quote for fire truck equipment listed on {CONTACT_INFO.COMPANY_NAME}.
+            Garage connects buyers and sellers but is not a party
+            to the transaction. Please contact {CONTACT_INFO.EMAIL} to connect
             with the seller for purchase inquiries, payment terms, and delivery
             arrangements. Price is subject to availability and final negotiation
             between buyer and seller.
@@ -121,8 +122,7 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
         {/* Footer */}
         <View style={invoiceStyles.footer}>
           <Text>
-            Generated via Garage Marketplace • To connect with seller:
-            alaz@withgarage.com
+            Generated via {CONTACT_INFO.COMPANY_NAME} • To connect with seller: {CONTACT_INFO.EMAIL}
           </Text>
         </View>
       </Page>
