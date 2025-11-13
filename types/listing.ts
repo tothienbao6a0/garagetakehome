@@ -7,6 +7,7 @@ export interface ListingData {
   make?: string;
   model?: string;
   mileage?: number;
+  specs?: string; // Formatted string of all available attributes
 }
 
 export interface ApiError {

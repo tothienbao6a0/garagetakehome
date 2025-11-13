@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { ListingData, ApiError } from "@/types/listing";
 import { API_CONFIG, ERROR_MESSAGES } from "@/lib/constants";
 import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limiter";
+import { formatAttribute } from "@/lib/attribute-labels";
 
 /**
  * Fetches listing data by scraping the Garage listing page
@@ -43,45 +44,56 @@ async function fetchListingFromPage(id: string): Promise<ListingData | null> {
       return null;
     }
 
-    // Extract useful data from listingAttributes
+    // Extract all meaningful attributes
     const attributes = listingPreview.listingAttributes || [];
+    const attributeValues: string[] = [];
+
     let mileage: number | undefined;
     let model: string | undefined;
     let year: number | undefined;
 
-    // Known attribute IDs (these are consistent across listings)
+    // Known attribute IDs for backwards compatibility
     const MILEAGE_ATTR_ID = '7d794d55-f1dd-4b5d-90ab-b277e202ceed';
     const MODEL_ATTR_ID = '0f5716f2-0d28-4516-a693-ecd1f4436f0f';
 
-    // Parse attributes to extract specific fields
+    // Extract and format all attributes (including booleans)
     for (const attr of attributes) {
       const value = attr.value;
+      const categoryAttributeId = attr.categoryAttributeId;
 
-      // Extract mileage by known UUID
-      if (attr.categoryAttributeId === MILEAGE_ATTR_ID && /^\d+$/.test(value)) {
+      // Extract known fields for backwards compatibility
+      if (categoryAttributeId === MILEAGE_ATTR_ID && /^\d+$/.test(value)) {
         mileage = parseInt(value, 10);
-      }
-
-      // Extract model by known UUID
-      if (attr.categoryAttributeId === MODEL_ATTR_ID && value !== 'true' && value !== 'false') {
+      } else if (categoryAttributeId === MODEL_ATTR_ID) {
         model = value;
       }
 
-      // Fallback: if we haven't found a model yet, look for string values that look like model names
-      if (!model && /^[A-Za-z\s]+$/.test(value) && value.length > 3 && value.length < 50) {
-        const lowerValue = value.toLowerCase();
-        // Skip boolean values and brand names
-        if (lowerValue !== 'true' && lowerValue !== 'false' && lowerValue !== listingPreview.itemBrand?.toLowerCase()) {
-          model = value;
-        }
+      // Format attribute with label (returns null for skipped values)
+      const formatted = formatAttribute(categoryAttributeId, value);
+      if (formatted) {
+        attributeValues.push(formatted);
       }
     }
 
-    // Extract year from title if present (e.g., "2009 Spartan...")
-    const yearMatch = listingPreview.listingTitle?.match(/^(\d{4})\s/);
+    // Extract year from title if present (e.g., "2009 Spartan..." or "NEW BUILD 2024 RAM...")
+    const yearMatch = listingPreview.listingTitle?.match(/\b(19\d{2}|20\d{2})\b/);
     if (yearMatch) {
       year = parseInt(yearMatch[1], 10);
     }
+
+    // Remove duplicate values (case-insensitive) while preserving order
+    const seen = new Set<string>();
+    const uniqueValues = attributeValues.filter(v => {
+      const lower = v.toLowerCase();
+      if (seen.has(lower)) {
+        return false;
+      }
+      seen.add(lower);
+      return true;
+    });
+
+    // Create formatted specs string from all attributes
+    const specs = uniqueValues.join(' • ');
 
     // Note: Detailed descriptions are not available in the initial page data
     // They're loaded dynamically via JavaScript after page load
@@ -98,6 +110,7 @@ async function fetchListingFromPage(id: string): Promise<ListingData | null> {
       make: listingPreview.itemBrand,
       model: model,
       mileage: mileage,
+      specs: specs || undefined, // Formatted string of all attributes
     };
   } catch (error) {
     console.warn(`Failed to fetch listing from page:`, error instanceof Error ? error.message : 'Unknown error');

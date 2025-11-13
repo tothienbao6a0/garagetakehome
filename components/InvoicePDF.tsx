@@ -17,7 +17,8 @@ interface InvoicePDFProps {
 export function InvoicePDF({ listing }: InvoicePDFProps) {
   const currentDate = formatDate();
   const invoiceNumber = generateInvoiceNumber(listing.id);
-  const itemSpecs = formatItemSpecs({
+  // Use pre-formatted specs if available, otherwise fall back to old format
+  const itemSpecs = listing.specs || formatItemSpecs({
     year: listing.year,
     make: listing.make,
     model: listing.model,
