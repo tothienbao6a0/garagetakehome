@@ -27,7 +27,7 @@ export function InvoiceForm({ url, setUrl, error, isPending, onSubmit, onPreview
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://www.withgarage.com/listing/..."
+          placeholder="https://www.shopgarage.com/listing/..."
           required
           disabled={isPending}
           className="h-11 border-gray-300 focus:border-[#FF6B2C] focus:ring-[#FF6B2C]"
