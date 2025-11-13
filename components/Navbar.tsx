@@ -11,8 +11,8 @@ const NAV_LINKS = [
 export function Navbar() {
   return (
     <header className="border-b border-gray-200 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[72px]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
+        <div className="flex items-center justify-between h-16">
           {/* Logo on left */}
           <div className="flex items-center">
             <Image 
@@ -20,7 +20,7 @@ export function Navbar() {
               alt="Garage" 
               width={120} 
               height={20} 
-              className="h-5 w-auto"
+              className="h-6 w-auto"
               priority
             />
           </div>
@@ -32,7 +32,7 @@ export function Navbar() {
                 <a
                   key={label}
                   href={href}
-                  className="text-base font-normal text-black hover:text-gray-600 transition-colors"
+                  className="text-base font-medium text-black hover:text-gray-600 transition-colors"
                 >
                   {label}
                 </a>
@@ -61,11 +61,11 @@ function SearchInput() {
 
   return (
     <form onSubmit={handleSearch} className="relative">
-      <input 
+      <input
         type="text"
         name="search"
         placeholder="Browse listings"
-        className="w-64 pl-4 pr-12 py-2.5 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-full placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B2C] focus:border-transparent focus:bg-white transition-colors"
+        className="w-60 pl-4 pr-12 py-2 text-base text-gray-600 bg-white border border-gray-300 rounded-full placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
         aria-label="Search listings"
       />
       <button 
