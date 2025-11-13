@@ -292,7 +292,7 @@ Download PDF to User
 
 ### GET `/api/listing`
 
-Fetches listing data from Garage API with fallback to mock data.
+Fetches listing data from Garage website by scraping the `__NEXT_DATA__` embedded in server-side generated pages.
 
 **Query Parameters:**
 - `id` (string, required) - Listing UUID
@@ -309,14 +309,33 @@ X-RateLimit-Reset: 2025-01-15T14:30:00.000Z
 {
   "id": "abc-123",
   "title": "2018 Pierce Enforcer Pumper",
-  "description": "Excellent condition...",
+  "description": "",
   "price": 425000,
   "year": 2018,
   "make": "Pierce",
   "model": "Enforcer",
-  "mileage": 15000
+  "mileage": 15000,
+  "specs": "10,423 miles • 85 • quint • 400 • Pierce • 2000 • Dash"
 }
 ```
+
+**Data Limitations:**
+
+The API scrapes listing data from Garage's server-side generated HTML (`__NEXT_DATA__` script tag). This approach has limitations:
+
+1. **Attribute Labels Not Available**: Garage loads attribute labels (like "Pump", "Tank", "Chassis") dynamically via JavaScript after page load. These labels are not in the SSG data, so we only show raw attribute values without guessing their meaning.
+
+2. **Boolean Attributes Filtered**: Boolean attributes (true/false values) appear on the Garage website as feature badges (e.g., "Runs without issue", "Has siren system"), but their human-readable labels are not in the SSG data. We filter these out to avoid showing meaningless data.
+
+3. **Dynamic Content Missing**: Any content loaded via client-side JavaScript (descriptions, detailed specs) is not accessible through server-side scraping.
+
+**What We Extract:**
+- Basic fields: title, price, make, year (from title)
+- Mileage: Formatted with commas and "miles" suffix (only value we can confidently identify)
+- Model, numeric values, text values: Shown as-is from attributes
+- All values are deduplicated and joined with " • " separator
+
+**No Fake Data:** The implementation prioritizes accuracy over completeness. We only show data that's definitively available in the SSG payload - no guessing, no fake labels, no made-up information.
 
 **Error Responses:**
 - `400` - Missing listing ID
