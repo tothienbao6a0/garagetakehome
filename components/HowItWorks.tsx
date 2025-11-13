@@ -1,8 +1,8 @@
 const STEPS = [
-  "Paste a Garage fire truck listing URL above",
-  "We'll fetch the truck details from the listing",
+  "Paste a Garage listing URL above",
+  "We'll fetch the item details from the listing",
   "A professional PDF invoice will be generated instantly",
-  "Download and share with your fire department",
+  "Download and share for your purchase process",
 ] as const;
 
 export function HowItWorks() {

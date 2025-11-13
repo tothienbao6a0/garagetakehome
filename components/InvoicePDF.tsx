@@ -1,4 +1,4 @@
-import { Document, Page, Text, View } from "@react-pdf/renderer";
+import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import type { ListingData } from "@/types/listing";
 import { invoiceStyles } from "@/lib/invoice-styles";
 import { CONTACT_INFO } from "@/lib/constants";
@@ -40,20 +40,41 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
           </View>
         </View>
 
-        {/* From Section */}
-        <View style={invoiceStyles.fromSection}>
-          <Text style={invoiceStyles.sectionTitle}>From (Seller)</Text>
-          <Text style={invoiceStyles.companyName}>Equipment Seller</Text>
-          <Text style={invoiceStyles.address}>Listed on {CONTACT_INFO.COMPANY_NAME}</Text>
-          <Text style={invoiceStyles.address}>For seller contact: {CONTACT_INFO.EMAIL}</Text>
-        </View>
+        {/* From/Bill To Section with Image */}
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
+          <View style={{ flex: 1 }}>
+            {/* From Section */}
+            <View style={invoiceStyles.fromSection}>
+              <Text style={invoiceStyles.sectionTitle}>From (Seller)</Text>
+              <Text style={invoiceStyles.companyName}>Equipment Seller</Text>
+              <Text style={invoiceStyles.address}>Listed on {CONTACT_INFO.COMPANY_NAME}</Text>
+              <Text style={invoiceStyles.address}>For seller contact: {CONTACT_INFO.EMAIL}</Text>
+            </View>
 
-        {/* Bill To Section */}
-        <View style={invoiceStyles.billToSection}>
-          <Text style={invoiceStyles.sectionTitle}>Bill To (Buyer)</Text>
-          <Text style={invoiceStyles.address}>____________________________________</Text>
-          <Text style={invoiceStyles.address}>____________________________________</Text>
-          <Text style={invoiceStyles.address}>____________________________________</Text>
+            {/* Bill To Section */}
+            <View style={invoiceStyles.billToSection}>
+              <Text style={invoiceStyles.sectionTitle}>Bill To (Buyer)</Text>
+              <Text style={invoiceStyles.address}>____________________________________</Text>
+              <Text style={invoiceStyles.address}>____________________________________</Text>
+              <Text style={invoiceStyles.address}>____________________________________</Text>
+            </View>
+          </View>
+
+          {/* Listing Image */}
+          {listing.imageUrl && (
+            <View style={{ marginLeft: 20 }}>
+              <Image
+                src={listing.imageUrl}
+                style={{
+                  width: 180,
+                  height: 120,
+                  objectFit: "cover",
+                  borderRadius: 4,
+                  border: "1 solid #e5e7eb",
+                }}
+              />
+            </View>
+          )}
         </View>
 
         {/* Line Items */}
@@ -111,7 +132,7 @@ export function InvoicePDF({ listing }: InvoicePDFProps) {
         <View style={invoiceStyles.termsSection}>
           <Text style={invoiceStyles.termsTitle}>Payment Terms & Notes</Text>
           <Text style={invoiceStyles.termsText}>
-            This is a quote for fire truck equipment listed on {CONTACT_INFO.COMPANY_NAME}.
+            This is a quote for equipment listed on {CONTACT_INFO.COMPANY_NAME}.
             Garage connects buyers and sellers but is not a party
             to the transaction. Please contact {CONTACT_INFO.EMAIL} to connect
             with the seller for purchase inquiries, payment terms, and delivery

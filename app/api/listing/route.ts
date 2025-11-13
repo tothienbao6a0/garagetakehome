@@ -111,6 +111,7 @@ async function fetchListingFromPage(id: string): Promise<ListingData | null> {
       model: model,
       mileage: mileage,
       specs: specs || undefined, // Formatted string of all attributes
+      imageUrl: listingPreview.imageUrl || undefined, // Primary product image
     };
   } catch (error) {
     console.warn(`Failed to fetch listing from page:`, error instanceof Error ? error.message : 'Unknown error');

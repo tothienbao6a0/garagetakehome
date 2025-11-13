@@ -35,7 +35,7 @@ export default function Home() {
               Generate Invoices
             </h1>
             <p className="text-lg text-gray-600">
-              Create professional PDF invoices for fire truck listings
+              Create professional PDF invoices for Garage listings
             </p>
           </div>
 

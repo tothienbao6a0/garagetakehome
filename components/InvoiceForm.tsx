@@ -35,7 +35,7 @@ export function InvoiceForm({ url, setUrl, error, isPending, onSubmit, onPreview
           aria-invalid={!!error}
         />
         <p id="url-description" className="text-sm text-gray-500 mt-2">
-          Paste a Garage fire truck listing URL
+          Paste a Garage listing URL
         </p>
       </div>
 

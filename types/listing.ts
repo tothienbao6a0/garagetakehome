@@ -8,6 +8,7 @@ export interface ListingData {
   model?: string;
   mileage?: number;
   specs?: string; // Formatted string of all available attributes
+  imageUrl?: string; // Primary product image
 }
 
 export interface ApiError {
