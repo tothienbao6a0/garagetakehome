@@ -7,28 +7,29 @@ describe("Constants", () => {
       const validUrls = [
         "https://withgarage.com/listing/abc-123-def",
         "http://withgarage.com/listing/550e8400-e29b-41d4-a716-446655440000",
-        "/listing/abc-123",
-        "https://example.com/listing/test-id-123",
+        "https://www.withgarage.com/listing/abc-123",
+        "https://shopgarage.com/listing/test-id-123",
+        "https://www.shopgarage.com/listing/test-id-456",
       ];
 
       validUrls.forEach((url) => {
         const match = url.match(UUID_REGEX);
         expect(match).not.toBeNull();
-        expect(match![1]).toBeTruthy();
+        expect(match![2]).toBeTruthy(); // Group 2 is the listing ID
       });
     });
 
     it("should extract UUID from valid URLs", () => {
       const tests = [
         { url: "https://withgarage.com/listing/abc-123-xyz", expected: "abc-123-xyz" },
-        { url: "/listing/test-id", expected: "test-id" },
-        { url: "https://site.com/listing/uuid-123", expected: "uuid-123" },
+        { url: "https://www.withgarage.com/listing/test-id", expected: "test-id" },
+        { url: "https://shopgarage.com/listing/uuid-123", expected: "uuid-123" },
       ];
 
       tests.forEach(({ url, expected }) => {
         const match = url.match(UUID_REGEX);
         expect(match).not.toBeNull();
-        expect(match![1]).toBe(expected);
+        expect(match![2]).toBe(expected); // Group 2 is the listing ID (group 1 is domain)
       });
     });
 
@@ -38,6 +39,9 @@ describe("Constants", () => {
         "https://withgarage.com/listing/",
         "https://withgarage.com",
         "no-listing-here",
+        "/listing/abc-123", // No domain
+        "https://example.com/listing/test-id-123", // Wrong domain
+        "https://evil.com/listing/abc-123", // Malicious domain
       ];
 
       invalidUrls.forEach((url) => {

@@ -3,18 +3,35 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { InvoicePDF } from "@/components/InvoicePDF";
 import { createElement } from "react";
 import type { ListingData, ApiError } from "@/types/listing";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { ERROR_MESSAGES, INPUT_LIMITS } from "@/lib/constants";
 import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limiter";
+
+function sanitizeString(str: string | undefined, maxLength: number): string {
+  if (!str) return "";
+  // Remove any control characters and limit length
+  return str.replace(/[\x00-\x1F\x7F]/g, "").slice(0, maxLength);
+}
 
 function validateListingData(data: unknown): data is ListingData {
   if (!data || typeof data !== "object") return false;
-  
+
   const listing = data as Partial<ListingData>;
   return !!(
     listing.id &&
     listing.title &&
     typeof listing.price === "number"
   );
+}
+
+function sanitizeListingData(data: ListingData): ListingData {
+  return {
+    ...data,
+    id: sanitizeString(data.id, INPUT_LIMITS.ID_MAX_LENGTH),
+    title: sanitizeString(data.title, INPUT_LIMITS.TITLE_MAX_LENGTH),
+    description: sanitizeString(data.description, INPUT_LIMITS.DESCRIPTION_MAX_LENGTH),
+    make: sanitizeString(data.make, INPUT_LIMITS.STRING_FIELD_MAX_LENGTH),
+    model: sanitizeString(data.model, INPUT_LIMITS.STRING_FIELD_MAX_LENGTH),
+  };
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -53,8 +70,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    // Sanitize input data to prevent DoS attacks with large inputs
+    const sanitizedData = sanitizeListingData(listingData);
+
     // Generate PDF
-    const pdfElement = createElement(InvoicePDF, { listing: listingData });
+    const pdfElement = createElement(InvoicePDF, { listing: sanitizedData });
     const pdfBuffer = await renderToBuffer(pdfElement as any);
 
     // Return PDF as response

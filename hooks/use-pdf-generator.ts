@@ -20,7 +20,7 @@ export function usePDFGenerator(): UsePDFGeneratorReturn {
     if (!match) {
       throw new Error(ERROR_MESSAGES.INVALID_URL);
     }
-    return match[1];
+    return match[2]; // Group 2 is the listing ID (group 1 is the domain)
   }, []);
 
   const fetchListingData = useCallback(async (listingId: string): Promise<ListingData> => {

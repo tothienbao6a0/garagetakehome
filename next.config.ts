@@ -23,6 +23,20 @@ const nextConfig: NextConfig = {
             key: "Referrer-Policy",
             value: "origin-when-cross-origin",
           },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.js requires unsafe-eval/inline for dev
+              "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
+              "img-src 'self' data: blob:",
+              "font-src 'self' data:",
+              "connect-src 'self'",
+              "frame-ancestors 'self'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join("; "),
+          },
         ],
       },
     ];

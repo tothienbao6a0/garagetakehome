@@ -42,7 +42,7 @@ describe("usePDFGenerator", () => {
     });
 
     await waitFor(() => {
-      expect(result.current.error).toContain("Invalid listing URL format");
+      expect(result.current.error).toContain("Invalid listing URL");
     });
   });
 
