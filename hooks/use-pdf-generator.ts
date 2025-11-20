@@ -13,60 +13,62 @@ interface UsePDFGeneratorReturn {
   closePreview: () => void;
 }
 
+// Pure utility functions - no need for useCallback
+function extractListingId(url: string): string {
+  const match = url.match(UUID_REGEX);
+  if (!match) {
+    throw new Error(ERROR_MESSAGES.INVALID_URL);
+  }
+  return match[2]; // Group 2 is the listing ID (group 1 is the domain)
+}
+
+async function fetchListingData(listingId: string): Promise<ListingData> {
+  const response = await fetch(`/api/listing?id=${listingId}`);
+
+  if (!response.ok) {
+    const data: ApiError = await response.json();
+    throw new Error(data.error || ERROR_MESSAGES.FETCH_FAILED);
+  }
+
+  return response.json();
+}
+
+async function generatePDFFromData(listingData: ListingData): Promise<Blob> {
+  const response = await fetch("/api/generate-pdf", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(listingData),
+  });
+
+  if (!response.ok) {
+    throw new Error(ERROR_MESSAGES.PDF_GENERATION_FAILED);
+  }
+
+  return response.blob();
+}
+
+function downloadPDF(blob: Blob, listingId: string): void {
+  const downloadUrl = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = `garage-invoice-${listingId}.pdf`;
+  document.body.appendChild(link);
+  link.click();
+
+  // Cleanup
+  link.remove();
+  window.URL.revokeObjectURL(downloadUrl);
+}
+
 export function usePDFGenerator(): UsePDFGeneratorReturn {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  const extractListingId = useCallback((url: string): string => {
-    const match = url.match(UUID_REGEX);
-    if (!match) {
-      throw new Error(ERROR_MESSAGES.INVALID_URL);
-    }
-    return match[2]; // Group 2 is the listing ID (group 1 is the domain)
-  }, []);
-
-  const fetchListingData = useCallback(async (listingId: string): Promise<ListingData> => {
-    const response = await fetch(`/api/listing?id=${listingId}`);
-    
-    if (!response.ok) {
-      const data: ApiError = await response.json();
-      throw new Error(data.error || ERROR_MESSAGES.FETCH_FAILED);
-    }
-    
-    return response.json();
-  }, []);
-
-  const generatePDFFromData = useCallback(async (listingData: ListingData): Promise<Blob> => {
-    const response = await fetch("/api/generate-pdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(listingData),
-    });
-
-    if (!response.ok) {
-      throw new Error(ERROR_MESSAGES.PDF_GENERATION_FAILED);
-    }
-
-    return response.blob();
-  }, []);
-
-  const downloadPDF = useCallback((blob: Blob, listingId: string): void => {
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = `garage-invoice-${listingId}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    
-    // Cleanup
-    link.remove();
-    window.URL.revokeObjectURL(downloadUrl);
-  }, []);
-
+  // useCallback needed - depends on state and passed to event handlers
   const generatePDF = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -81,7 +83,7 @@ export function usePDFGenerator(): UsePDFGeneratorReturn {
         setError(err instanceof Error ? err.message : ERROR_MESSAGES.UNEXPECTED_ERROR);
       }
     });
-  }, [url, extractListingId, fetchListingData, generatePDFFromData, downloadPDF]);
+  }, [url]);
 
   const previewPDF = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +102,7 @@ export function usePDFGenerator(): UsePDFGeneratorReturn {
         setError(err instanceof Error ? err.message : ERROR_MESSAGES.UNEXPECTED_ERROR);
       }
     });
-  }, [url, extractListingId, fetchListingData, generatePDFFromData]);
+  }, [url]);
 
   const closePreview = useCallback(() => {
     if (pdfUrl) {
