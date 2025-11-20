@@ -5,24 +5,15 @@ import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limiter";
 import { formatAttribute } from "@/lib/attribute-labels";
 
 /**
- * Fetches listing data by scraping the Garage listing page
- * The website uses Next.js SSG with data embedded in the page
+ * Fetches the current Next.js buildId from Garage homepage
+ * The buildId is required for the data API and changes with each deployment
  */
-async function fetchListingFromPage(id: string): Promise<ListingData | null> {
+async function getBuildId(): Promise<string | null> {
   try {
-    // The listing URL format is: https://www.shopgarage.com/listing/{title}-{uuid}
-    // But we can try with just the UUID and follow redirects, or try the Next.js data API
-    const baseUrl = "https://www.shopgarage.com/listing";
-
-    // Try fetching with just the ID - the site might redirect to the correct slug
-    const response = await fetch(`${baseUrl}/${id}`, {
-      headers: {
-        "User-Agent": API_CONFIG.USER_AGENT,
-        "Accept": "text/html",
-      },
+    const response = await fetch("https://www.shopgarage.com", {
+      headers: { "User-Agent": API_CONFIG.USER_AGENT },
       cache: API_CONFIG.CACHE,
       next: { revalidate: API_CONFIG.REVALIDATE },
-      redirect: "follow", // Follow redirects to get to the canonical URL
     });
 
     if (!response.ok) {
@@ -30,15 +21,43 @@ async function fetchListingFromPage(id: string): Promise<ListingData | null> {
     }
 
     const html = await response.text();
+    const match = html.match(/"buildId":"([^"]+)"/);
+    return match ? match[1] : null;
+  } catch (error) {
+    console.warn("Failed to fetch buildId:", error instanceof Error ? error.message : 'Unknown error');
+    return null;
+  }
+}
 
-    // Extract __NEXT_DATA__ from the page
-    const nextDataMatch = html.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/);
-    if (!nextDataMatch) {
+/**
+ * Fetches listing data from Garage's Next.js data API
+ * This is the proper way to get listing data as a clean JSON response
+ */
+async function fetchListingFromAPI(slug: string): Promise<ListingData | null> {
+  try {
+    // Get current buildId
+    const buildId = await getBuildId();
+    if (!buildId) {
       return null;
     }
 
-    const nextData = JSON.parse(nextDataMatch[1]);
-    const listingPreview = nextData?.props?.pageProps?.listingPreview;
+    // Fetch from Next.js data API
+    const apiUrl = `https://www.shopgarage.com/_next/data/${buildId}/listing/${slug}.json`;
+    const response = await fetch(apiUrl, {
+      headers: {
+        "User-Agent": API_CONFIG.USER_AGENT,
+        "Accept": "application/json",
+      },
+      cache: API_CONFIG.CACHE,
+      next: { revalidate: API_CONFIG.REVALIDATE },
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    const listingPreview = data?.pageProps?.listingPreview;
 
     if (!listingPreview) {
       return null;
@@ -102,7 +121,7 @@ async function fetchListingFromPage(id: string): Promise<ListingData | null> {
 
     // Map the Garage API response to our ListingData interface
     return {
-      id: listingPreview.id || id,
+      id: listingPreview.id,
       title: listingPreview.listingTitle || "",
       description: description,
       price: listingPreview.sellingPrice || 0,
@@ -114,7 +133,44 @@ async function fetchListingFromPage(id: string): Promise<ListingData | null> {
       imageUrl: listingPreview.imageUrl || undefined, // Primary product image
     };
   } catch (error) {
-    console.warn(`Failed to fetch listing from page:`, error instanceof Error ? error.message : 'Unknown error');
+    console.warn(`Failed to fetch listing from API:`, error instanceof Error ? error.message : 'Unknown error');
+    return null;
+  }
+}
+
+/**
+ * Fallback: Fetches listing by following redirect to get the slug
+ * Used when the listing slug is unknown (only have UUID)
+ */
+async function fetchListingWithSlugResolution(id: string): Promise<ListingData | null> {
+  try {
+    // Fetch the listing page with the ID to get redirected to the full slug
+    const response = await fetch(`https://www.shopgarage.com/listing/${id}`, {
+      headers: {
+        "User-Agent": API_CONFIG.USER_AGENT,
+        "Accept": "text/html",
+      },
+      cache: API_CONFIG.CACHE,
+      next: { revalidate: API_CONFIG.REVALIDATE },
+      redirect: "manual", // Don't auto-follow so we can extract the slug
+    });
+
+    // If we get a redirect, extract the slug from the Location header
+    if (response.status === 307 || response.status === 308) {
+      const location = response.headers.get("location");
+      if (location) {
+        const slugMatch = location.match(/\/listing\/([^?]+)/);
+        if (slugMatch) {
+          const slug = slugMatch[1];
+          console.log(`Resolved slug for ${id}: ${slug}`);
+          return await fetchListingFromAPI(slug);
+        }
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.warn(`Failed to resolve slug for ${id}:`, error instanceof Error ? error.message : 'Unknown error');
     return null;
   }
 }
@@ -175,12 +231,24 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    // Fetch listing data from the Garage website
-    let listingData = await fetchListingFromPage(id);
+    let listingData: ListingData | null = null;
 
-    // Fallback to mock data for development/testing
+    // Strategy 1: Try with full slug if provided (most efficient)
+    // User might provide full slug like "2008-Crimson-Spartan-Pumper-dbb3fcda-..."
+    if (id.includes('-')) {
+      console.log(`Attempting to fetch with slug: ${id}`);
+      listingData = await fetchListingFromAPI(id);
+    }
+
+    // Strategy 2: If just UUID provided, resolve the slug first
     if (!listingData) {
-      console.warn(`Could not fetch listing ${id} from Garage website, using mock data`);
+      console.log(`Attempting to resolve slug for UUID: ${id}`);
+      listingData = await fetchListingWithSlugResolution(id);
+    }
+
+    // Strategy 3: Fallback to mock data for development/testing
+    if (!listingData) {
+      console.warn(`Could not fetch listing ${id} from Garage API, using mock data`);
       listingData = { id, ...MOCK_LISTING_DATA };
     }
 
